@@ -28,10 +28,10 @@ int main() {
 
 		switch (event.type) {
 			case Expose:
-				exposed_handler(&sender);
+				exposed_handler(&event.xexpose, &sender);
 				break;
 			case KeyRelease:
-				key_released_handler(event.xkey.keycode, &sender);
+				key_released_handler(&event.xkey, &sender);
 				break;
 			default:
 				break;
