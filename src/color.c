@@ -14,7 +14,3 @@ uint32_t get_color_rgb(uint8_t red, uint8_t green, uint8_t blue) {
 		return (uint32_t)((uint32_t)red | (((uint32_t)green)<<0x8) | (((uint32_t)blue)<<0x10));
 	}
 }
-
-uint32_t get_color_hex(uint32_t argb) {
-	return argb;
-}
