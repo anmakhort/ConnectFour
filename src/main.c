@@ -33,18 +33,25 @@ int main() {
 	XSetWMNormalHints(display, win, &hints);
 
 	XSetWindowBackground(display, win, WND_BG_C);
-	XClearWindow(display, win);
-
-	XFlush(display);
-	XSync(display, 0);
-
 	XMapWindow(display, win);
-	XSync(display, 0);
+
+	Atom WM_DELETE_WINDOW = XInternAtom(display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(display, win, &WM_DELETE_WINDOW, 1);
+    XSync(display, 0);
 
 	char *img_buff = NULL;
 	XImage *img = create_frame_image(display, visual, depth, &img_buff);
 	
-	object_t sender = {display, &win, img, img_buff};
+	// allocate struct on STACK, because 37 bytes (40 bytes without packing)
+	// is not so critical compared to the default stack size & don't need to
+	// care about manually deallocating its memory:
+	object_t sender = {display, &win, img, img_buff, screen, -1};
+
+	// no need to pass object_t* struct as argument,
+	// because update(...) will be called from
+	// the exposed_handler(...) at the beginning
+	// of the GUI initialisation, so we use NULL:
+	new_game(NULL);
 
 	while (1) {
 		XEvent event;
@@ -52,23 +59,26 @@ int main() {
 
 		switch (event.type) {
 			case Expose:
-				exposed_handler(&event.xexpose, &sender);
+				if (0 == event.xexpose.count)
+					exposed_handler(&event.xexpose, &sender);
 				break;
+
 			case KeyRelease:
 				key_released_handler(&event.xkey, &sender);
 				break;
+
+			case ClientMessage:
+				// it is OK, because we subscribed only to the
+				// "pressed 'X' window's button" event -
+				// so, do clean-up, disconnect from the server
+				// and exit:
+				clean_up_exit(&sender);
+				break;
+
 			default:
 				break;
 		}
 	}
 
 	return 0;
-}
-
-XImage *create_frame_image(Display *disp, Visual *vis, int depth, char **buff) {
-	if (!disp || !vis || depth < 24 || !buff) return NULL;
-	if (*buff) free(*buff);
-	*buff = malloc(4 * sizeof(char) * BF_WIDTH * BF_HEIGHT);
-	return XCreateImage(disp, vis, depth, ZPixmap, 0, *buff, \
-		BF_WIDTH, BF_HEIGHT, 32, 0);
 }
