@@ -19,16 +19,15 @@
 #define WND_BG_C	0x0ce0fc
 
 // battlefield:
-#define BF_OFFSET_X	0
-#define BF_OFFSET_Y	0
-#define BF_WIDTH	(WND_WIDTH-2*BF_OFFSET_X)
-#define BF_HEIGHT	(WND_HEIGHT-2*BF_OFFSET_Y)
+#define BF_WIDTH	(WND_WIDTH)
+#define BF_HEIGHT	(WND_HEIGHT)
 #define BF_SIZE_X	7
 #define BF_SIZE_Y	6
 
 // tiles:
-#define TILE_WIDTH	70
-#define TILE_HEIGHT	70
+#define TILE_WIDTH	85
+#define TILE_HEIGHT	85
+#define CIRCLE_DELTA 10
 
 // space between two tiles:
 #define TILE_X_SPACE (BF_WIDTH-BF_SIZE_X*TILE_WIDTH)/(BF_SIZE_X+1)
@@ -37,14 +36,6 @@
 // quit(exit) keys:
 #define KEYBOARD_ESC	0xff1b
 #define KEYBOARD_Q		0x71
-// navigation player1:
-#define KEYBOARD_A		0x61
-#define KEYBOARD_D		0x64
-#define KEYBOARD_SPACE	0x20
-// navigation player2:
-#define KEYBOARD_LEFT	0xff51
-#define KEYBOARD_RIGHT	0xff53
-#define KEYBOARD_DOWN	0xff54
 // save/load last game:
 #define KEYBOARD_S		0x73
 #define KEYBOARD_L		0x6c
@@ -64,25 +55,46 @@
 // when NO exit/quit key was pressed:
 #define NORMAL_STATUS	0
 
+// max players allowed:
+#define NUM_PLAYERS		2
+
+#pragma pack (1)
 typedef struct object_s {
 	Display *disp;
 	Window *wnd;
 	XImage *frame_img;
 	char *img_ptr;
+	int screen;
+	char player;
 } object_t;
 
+typedef struct battlefield_s {
+	char value;
+	char player;
+} bfield_t;
+
+static const uint32_t player_color[NUM_PLAYERS] = {0x00ff00, 0xff0000};
+
 extern uint8_t endian;
-extern char bfield[BF_SIZE_Y][BF_SIZE_X];
+extern bfield_t bfield[BF_SIZE_X][BF_SIZE_Y];
 
+// color handling:
 uint8_t _isBigEndian();
-
 uint32_t get_color_rgb(uint8_t red, uint8_t green, uint8_t blue);
-uint32_t get_color_hex(uint32_t argb);
 
+// to create XImage as window's frame buffer:
 XImage *create_frame_image(Display *disp, Visual *vis, int depth, char **img_buff);
 
-void clean_up(object_t *sender);
-void update(object_t *sender);
+// clean-up functions:
+void clean_up_exit(object_t *sender);
+
+// game state drawing/updating functions:
+void new_game(object_t *sender); // clean game board
+void update(object_t *sender); // draw to window & copy to XImage
+void draw_game_field(object_t *sender); // put XImage to window
+void animate_falling(uint8_t i, uint8_t j, object_t *sender);
+
+// event handlers:
 void exposed_handler(XExposeEvent *ev, object_t *sender);
 void key_released_handler(XKeyEvent *ev, object_t *sender);
 

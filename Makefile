@@ -16,8 +16,12 @@ SOURCES = 	./src/main.c \
 			./src/expose.c \
 			./src/keyreleased.c \
 			./src/update.c \
-			./src/clean_up.c \
-			./src/color.c
+			./src/cleanup.c \
+			./src/color.c \
+			./src/createimg.c \
+			./src/drawgame.c \
+			./src/animate.c \
+			./src/newgame.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
