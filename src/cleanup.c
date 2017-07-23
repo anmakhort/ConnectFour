@@ -1,6 +1,6 @@
 #include "../include/connectfour.h"
 
-void clean_up(object_t *sender) {
+void clean_up_exit(object_t *sender) {
 	if (!sender) return;
 	if (sender->frame_img)
 		XDestroyImage(sender->frame_img);
