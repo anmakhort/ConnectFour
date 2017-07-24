@@ -9,7 +9,9 @@ void animate_falling(uint8_t i, uint8_t j, object_t *sender) {
 	j = j+1;
 	while (bfield[i][j].value <= 0 && (j < BF_SIZE_Y)) {
 		bfield[i][j].value = 1;
+		bfield[i][j].player = sender->player;
 		bfield[i][j-1].value = -1;
+		bfield[i][j-1].player = -1;
 		update(sender);
 		j++;
 	}

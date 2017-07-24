@@ -21,7 +21,10 @@ SOURCES = 	./src/main.c \
 			./src/createimg.c \
 			./src/drawgame.c \
 			./src/animate.c \
-			./src/newgame.c
+			./src/newgame.c \
+			./src/mousekey.c \
+			./src/getGC.c \
+			./src/getwinner.c
 
 OBJECTS = $(SOURCES:.c=.o)
 

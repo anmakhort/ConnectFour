@@ -23,7 +23,9 @@ int main() {
 		depth, InputOutput, visual, CWBorderPixel, &xswa);
 	
 	XStoreName(display, win, WND_TITLE);
-	XSelectInput(display, win, ExposureMask | KeyReleaseMask);
+	XSelectInput(display, win, 	ExposureMask | \
+								KeyReleaseMask | \
+								ButtonPressMask);
 
 	XSizeHints hints;
 	XGetWMNormalHints(display, win, &hints, NULL);
@@ -42,10 +44,10 @@ int main() {
 	char *img_buff = NULL;
 	XImage *img = create_frame_image(display, visual, depth, &img_buff);
 	
-	// allocate struct on STACK, because 37 bytes (40 bytes without packing)
-	// is not so critical compared to the default stack size & don't need to
-	// care about manually deallocating its memory:
-	object_t sender = {display, &win, img, img_buff, screen, -1};
+	// allocating struct on STACK, because 47 bytes is not so critical
+	// compared to the default stack size & don't need to care about
+	// manually deallocating its memory:
+	object_t sender = {display, &win, NULL, img, img_buff, screen, -1, -1, -1};
 
 	// no need to pass object_t* struct as argument,
 	// because update(...) will be called from
@@ -65,6 +67,10 @@ int main() {
 
 			case KeyRelease:
 				key_released_handler(&event.xkey, &sender);
+				break;
+
+			case ButtonPress:
+				mouse_key_pressed_handler(&event.xbutton, &sender);
 				break;
 
 			case ClientMessage:

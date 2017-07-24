@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
+#include <string.h> // for strlen(...)
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -58,14 +59,23 @@
 // max players allowed:
 #define NUM_PLAYERS		2
 
+// if winner was found:
+#define GREETINGS_STRING	"Player %i won this game! To start new one - press 'N'"
+#define GREETINGS_SIZE		strlen(GREETINGS_STRING)
+#define GREETINGS_X			(BF_WIDTH / 4 - 35)
+#define GREETINGS_Y			(BF_HEIGHT / 2)
+
 #pragma pack (1)
 typedef struct object_s {
 	Display *disp;
 	Window *wnd;
+	Pixmap *game_bg;
 	XImage *frame_img;
 	char *img_ptr;
 	int screen;
 	char player;
+	char tile_idx_x;
+	char winner;
 } object_t;
 
 typedef struct battlefield_s {
@@ -91,11 +101,19 @@ void clean_up_exit(object_t *sender);
 // game state drawing/updating functions:
 void new_game(object_t *sender); // clean game board
 void update(object_t *sender); // draw to window & copy to XImage
-void draw_game_field(object_t *sender); // put XImage to window
+void draw_game_field(object_t *sender); // put Pixmap to window
 void animate_falling(uint8_t i, uint8_t j, object_t *sender);
+
+// eval game (get the winner):
+char get_winner(object_t *sender);
+
+// get default GC + some drawing settings:
+GC *get_GC(object_t *sender, GC *out);
 
 // event handlers:
 void exposed_handler(XExposeEvent *ev, object_t *sender);
 void key_released_handler(XKeyEvent *ev, object_t *sender);
+//void mouse_move_handler(XMotionEvent *ev, object_t *sender);
+void mouse_key_pressed_handler(XButtonPressedEvent *ev, object_t *sender);
 
 #endif
