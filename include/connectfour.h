@@ -10,6 +10,7 @@
 #include <X11/Xutil.h>
 #include <X11/XKBlib.h>
 
+
 // main window params:
 #define WND_TITLE	"Connect Four"
 #define WND_X		0
@@ -59,11 +60,22 @@
 // max players allowed:
 #define NUM_PLAYERS		2
 
+// buffer size for greetings:
+#define TEXT_BUFFER_SIZE	64
+
 // if winner was found:
 #define GREETINGS_STRING	"Player %i won this game! To start new one - press 'N'"
 #define GREETINGS_SIZE		strlen(GREETINGS_STRING)
 #define GREETINGS_X			(BF_WIDTH / 4 - 35)
-#define GREETINGS_Y			(BF_HEIGHT / 2)
+#define GREETINGS_Y			(BF_HEIGHT / 2 - 25)
+#define GREETINGS_COLOR		0x0039e6
+
+// if the game is draw:
+#define DRAW_STRING			"This game is draw. To start new one - press 'N'"
+#define DRAW_SIZE			strlen(DRAW_STRING)
+#define DRAW_X				(BF_WIDTH / 4 - 50)
+#define DRAW_Y				(BF_HEIGHT / 2 - 25)
+#define DRAW_COLOR			0xff1ac6
 
 #pragma pack (1)
 typedef struct object_s {
@@ -76,6 +88,7 @@ typedef struct object_s {
 	char player;
 	char tile_idx_x;
 	char winner;
+	char nmoves;
 } object_t;
 
 typedef struct battlefield_s {
@@ -83,7 +96,7 @@ typedef struct battlefield_s {
 	char player;
 } bfield_t;
 
-static const uint32_t player_color[NUM_PLAYERS] = {0x00ff00, 0xff0000};
+static const uint32_t player_color[NUM_PLAYERS] = {0xff0000, 0x00ff00};
 
 extern uint8_t endian;
 extern bfield_t bfield[BF_SIZE_X][BF_SIZE_Y];
@@ -105,10 +118,13 @@ void draw_game_field(object_t *sender); // put Pixmap to window
 void animate_falling(uint8_t i, uint8_t j, object_t *sender);
 
 // eval game (get the winner):
-char get_winner(object_t *sender);
+void get_winner(object_t *sender);
 
 // get default GC + some drawing settings:
 GC *get_GC(object_t *sender, GC *out);
+
+// make a screenshot and save it to png:
+void print_screen(XImage *pImage, const char *path);
 
 // event handlers:
 void exposed_handler(XExposeEvent *ev, object_t *sender);

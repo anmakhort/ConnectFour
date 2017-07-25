@@ -13,6 +13,10 @@ void key_released_handler(XKeyEvent *ev, object_t *sender) {
 			sender->winner = -1;
 			new_game(sender);
 			break;
+
+		case KEYBOARD_P:
+			print_screen(sender->frame_img, "prntscrn.png");
+			break;
 			
 		default:
 			break;

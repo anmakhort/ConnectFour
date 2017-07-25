@@ -11,7 +11,8 @@ void update(object_t *sender) {
 
 	XSync(sender->disp, sender->screen);
 
-	if (sender->winner >= 0) return;
+	if (sender->winner >= 0 || \
+		sender->nmoves >= (BF_SIZE_X * BF_SIZE_Y)) return;
 
 	GC gc;
 	if (NULL == get_GC(sender, &gc)) return;

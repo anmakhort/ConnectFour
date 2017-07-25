@@ -47,7 +47,7 @@ int main() {
 	// allocating struct on STACK, because 47 bytes is not so critical
 	// compared to the default stack size & don't need to care about
 	// manually deallocating its memory:
-	object_t sender = {display, &win, NULL, img, img_buff, screen, -1, -1, -1};
+	object_t sender = {display, &win, NULL, img, img_buff, screen, -1, -1, -1, 0};
 
 	// no need to pass object_t* struct as argument,
 	// because update(...) will be called from

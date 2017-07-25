@@ -5,6 +5,7 @@
 #################################################################
 
 CC = gcc
+DEFINES = -D_XOPEN_SOURCE
 CFLAGS = -std=c99 -Wall -Wextra -Werror -O3
 INCLUDES = -I./include -I/usr/include -I/usr/X11/include
 LDFLAGS = -L/usr/lib -lXext -lX11 -lm -lpng
@@ -24,7 +25,8 @@ SOURCES = 	./src/main.c \
 			./src/newgame.c \
 			./src/mousekey.c \
 			./src/getGC.c \
-			./src/getwinner.c
+			./src/getwinner.c \
+			./src/printscreen.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
