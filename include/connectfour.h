@@ -27,9 +27,9 @@
 #define BF_SIZE_Y	6
 
 // tiles:
-#define TILE_WIDTH	85
-#define TILE_HEIGHT	85
-#define CIRCLE_DELTA 10
+#define TILE_WIDTH		85
+#define TILE_HEIGHT		85
+#define CIRCLE_DELTA 	10
 
 // space between two tiles:
 #define TILE_X_SPACE (BF_WIDTH-BF_SIZE_X*TILE_WIDTH)/(BF_SIZE_X+1)
@@ -50,13 +50,6 @@
 // undo move:
 #define KEYBOARD_BSPACE	0xff08
 
-// returned by key_released_handler
-// when exit(quit) key was pressed:
-#define EXIT_STATUS		~0
-// returned by key_released_handler
-// when NO exit/quit key was pressed:
-#define NORMAL_STATUS	0
-
 // max players allowed:
 #define NUM_PLAYERS		2
 
@@ -65,7 +58,6 @@
 
 // if winner was found:
 #define GREETINGS_STRING	"Player %i won this game! To start new one - press 'N'"
-#define GREETINGS_SIZE		strlen(GREETINGS_STRING)
 #define GREETINGS_X			(BF_WIDTH / 4 - 35)
 #define GREETINGS_Y			(BF_HEIGHT / 2 - 25)
 #define GREETINGS_COLOR		0x0039e6
