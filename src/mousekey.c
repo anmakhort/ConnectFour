@@ -1,6 +1,7 @@
 #include "../include/connectfour.h"
 
 bfield_t bfield[BF_SIZE_X][BF_SIZE_Y];
+point_t last_move_pt;
 
 void mouse_key_pressed_handler(XButtonPressedEvent *ev, object_t *sender) {
 	if (!ev || !sender) return;
@@ -34,6 +35,9 @@ void mouse_key_pressed_handler(XButtonPressedEvent *ev, object_t *sender) {
 	XFillArc(sender->disp, *sender->wnd, gc, x+CIRCLE_DELTA/2, \
 			TILE_Y_SPACE+CIRCLE_DELTA/2, TILE_WIDTH-CIRCLE_DELTA, \
 			TILE_HEIGHT-CIRCLE_DELTA, 0, 360*64);
+
+	last_move_pt.x = (short)sender->tile_idx_x;
+	last_move_pt.y = 0;
 
 	if (sender->nmoves < (BF_SIZE_X * BF_SIZE_Y))
 		animate_falling(sender->tile_idx_x, 0, sender);

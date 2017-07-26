@@ -26,7 +26,8 @@ SOURCES = 	./src/main.c \
 			./src/mousekey.c \
 			./src/getGC.c \
 			./src/getwinner.c \
-			./src/printscreen.c
+			./src/printscreen.c \
+			./src/undomove.c
 
 OBJECTS = $(SOURCES:.c=.o)
 

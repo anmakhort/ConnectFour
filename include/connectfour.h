@@ -96,10 +96,16 @@ typedef struct battlefield_s {
 	char player;
 } bfield_t;
 
+typedef struct point_s {
+	short x;
+	short y;
+} point_t;
+
 static const uint32_t player_color[NUM_PLAYERS] = {0xff0000, 0x00ff00};
 
 extern uint8_t endian;
 extern bfield_t bfield[BF_SIZE_X][BF_SIZE_Y];
+extern point_t last_move_pt;
 
 // color handling:
 uint8_t _isBigEndian();
@@ -116,6 +122,9 @@ void new_game(object_t *sender); // clean game board
 void update(object_t *sender); // draw to window & copy to XImage
 void draw_game_field(object_t *sender); // put Pixmap to window
 void animate_falling(uint8_t i, uint8_t j, object_t *sender);
+
+// undo last move if backspace key was pressed:
+void undo_move(object_t *sender);
 
 // eval game (get the winner):
 void get_winner(object_t *sender);
