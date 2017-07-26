@@ -21,6 +21,10 @@ void key_released_handler(XKeyEvent *ev, object_t *sender) {
 		case KEYBOARD_BSPACE:
 			undo_move(sender);
 			break;
+
+		case KEYBOARD_S:
+			save_game(sender, "game.bin");
+			break;
 			
 		default:
 			break;

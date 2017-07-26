@@ -127,6 +127,9 @@ GC *get_GC(object_t *sender, GC *out);
 // make a screenshot and save it to png:
 void print_screen(XImage *pImage, const char *path);
 
+// save current game state:
+void save_game(object_t *sender, const char *path);
+
 // event handlers:
 void exposed_handler(XExposeEvent *ev, object_t *sender);
 void key_released_handler(XKeyEvent *ev, object_t *sender);
