@@ -8,17 +8,21 @@ void draw_tile_grid(object_t *sender) {
 
 	XClearWindow(sender->disp, *sender->wnd);
 	XSetForeground(sender->disp, gc, 0xffffff);
-	
-	for (short i = 0; i < BF_SIZE_X; i++) {
-		short x = TILE_X_SPACE + (TILE_WIDTH + TILE_X_SPACE) * i;
 
-		for (short j = 0; j < BF_SIZE_Y; j++) {
-			short y = TILE_Y_SPACE + (TILE_HEIGHT + TILE_Y_SPACE) * j;
+	XFillRectangle(sender->disp, *sender->wnd, gc, TILE_X_SPACE, TILE_Y_SPACE, TILE_WIDTH, TILE_HEIGHT);
 
-			XFillRectangle(sender->disp, *sender->wnd, gc, x, y, \
-						TILE_WIDTH, TILE_HEIGHT);
-		}
+	short x = TILE_X_SPACE;
+	for (short i = 1; i < BF_SIZE_X; i++) {
+		x += (TILE_WIDTH + TILE_X_SPACE);
+		XCopyArea(sender->disp, *sender->wnd, *sender->wnd, gc, TILE_X_SPACE, TILE_Y_SPACE, TILE_WIDTH, TILE_HEIGHT, x, TILE_Y_SPACE);
 	}
+
+	short y = TILE_Y_SPACE;
+	for (short j = 1; j < BF_SIZE_Y; j++) {
+		y += (TILE_HEIGHT + TILE_Y_SPACE);
+		XCopyArea(sender->disp, *sender->wnd, *sender->wnd, gc, 0, 0, BF_WIDTH, BF_HEIGHT, 0, TILE_Y_SPACE+TILE_WIDTH);
+	}
+
 	XSync(sender->disp, sender->screen);
 }
 
